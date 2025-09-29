@@ -1,0 +1,117 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body.container-prime{ 
+    
+    background:url(../img/281a0c583d07293807f9580ad4c26717.jpg) no-repeat center center/cover;
+    position: relative;
+    height: 90vh;
+    justify-items: center;
+    align-content: center;
+    width: auto;
+
+}
+
+body.container-prime::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: inherit;
+    filter: brightness(40%);
+    transform: scale(1.1);
+    z-index: -1;
+}
+
+.login-container{
+    background: #ffffff2e;
+    backdrop-filter: blur(10px);
+    padding: 40px 40px;
+    border-radius: 16px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+    width: 600px;
+    max-width: 90vw;
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.login-container h2{
+    margin-bottom: 25px;
+    color:#0066cc;
+    font-size: 28px;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.form-group{
+    margin-bottom: 20px;
+}
+
+.form-group label{
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.form-group input{
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.form-group input:focus{
+    border-color: #50b8e7;
+    outline: none;
+    box-shadow: 0 0 8px rgba(0,102,204,0.3);
+}
+
+.login-btn{
+    width: 100%;
+    padding: 14px;
+    border: none;
+    background: #00264d;
+    color: #ffffff;
+    font-size: 17px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.login-btn:hover{
+    background: #0066cc;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,102,204,0.3);
+}
+
+.extra-links{
+    text-align: center;
+    margin-top: 18px;
+    font-size: 14px;
+}
+
+.extra-links a{
+    color: #004080;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.extra-links a:hover{
+    text-decoration: underline;
+}
