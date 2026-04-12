@@ -139,18 +139,17 @@ footer{
     color: #ffff;
     text-align: center;
     padding: 20px 10px;
-    margin-top: 50px;
 }
 
 footer p {
     margin: 5px 0;
     font-size: 0.95em;
-
 }
 
 footer strong{
     color:cornflowerblue;
 }
+
 .contact{
     background:#0f172a;
     padding: 60px 20px;
@@ -239,73 +238,111 @@ footer strong{
     }
 }
 
-.gallery{
-    padding: 60px 20px;
-    background: #edf7fc;
+/* --- GALLERY SECTION --- */
+.gallery {
+    padding: 80px 20px;
+    background-color: #f8fafc; /* Modern light slate background */
     text-align: center;
-    color: navy;
-}
-.gallery-container{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-.gallery-item img{
-    margin: 0 10px 0 10px;
-    width: 250px;
-    height: 250px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    transition: all 0.3s ease-in-out;
 }
 
-.gallery-item img:hover{
-    transform: scale(1.07);
-}
-
-.gallery-item{
-    flex: 1;
-}
-
-.gallery-item > .card{
-    width: 270px;
-    background-color: transparent;
-    padding: 10px 0px 0 0px;
-    border-radius: 5px;
-  box-shadow: 10px 10px rgb(28, 28, 32);
-}
-
-
-.gallery-item .card-body{
-    max-height: 270px;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
-
-.gallery-item .card-body{
-      background: linear-gradient(to right, #a4fdff, rgba(100, 148, 237, 0.686));
-
-}
-
-.card-body > h3{
+#specialists-heading {
+    font-size: 2.2rem;
+    color: #0f172a;
     margin-top: 0;
-    margin-bottom: 10px;
+    margin-bottom: 40px;
 }
 
-p {
-    letter-spacing: 1px;
-    line-height: 1.4rem;
+/* CSS Grid: Automatically handles responsiveness without media queries */
+.gallery-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-p.card-class{
-    margin: 0px 0px 0px 90px;
-    background:linear-gradient(to left, 	#50b8e7, #b9e2f5) ;
-    border-left: 2px solid #000053;
-    border-top: 2px solid #000053;
-    border-bottom: 2px solid #000053;
-    border-radius: 5px 0 0 5px;
+/* --- CARD DESIGN --- */
+.card {
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden; /* Keeps image strictly inside the rounded corners */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
+
+/* Smooth lift effect on hover */
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* --- CARD HEADER & IMAGE --- */
+.card-header {
+    position: relative;
+    width: 100%;
+    height: 300px; /* Fixed height for uniformity */
+}
+
+.card-header img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    display: block;
+}
+
+/* --- FLOATING BOOK BUTTON --- */
+.book-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgba(15, 23, 42, 0.85); /* Dark, slightly transparent */
+    backdrop-filter: blur(4px); /* Modern frosted glass effect */
+    color: #ffffff;
+    font-size: 0.9rem;
+    padding: 8px 20px;
+    border-radius: 20px; /* Pill shape */
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.book-btn:hover {
+    background: #0066cc; /* Brand blue on hover */
+    transform: scale(1.05);
+}
+
+/* --- CARD BODY --- */
+.card-body {
+    padding: 24px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.card-body h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.25rem;
+    color: #1e293b; /* Dark slate */
+}
+
+/* Modern Pill-Shaped Badge for Specialty */
+.card-class {
+    margin: 0;
+    background: #e0f2fe; /* Soft light blue */
+    color: #0369a1; /* Deep accessible blue text */
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    display: inline-block;
+}
+
+
 
 .testimonials {
     padding: 2rem 2rem;
@@ -458,7 +495,7 @@ p.card-class{
 }
 .card-header img{
     height: 250px;
-    object-fit:fill;
+    object-fit:cover;
     border-radius: 10px;
 }
 

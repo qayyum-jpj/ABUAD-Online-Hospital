@@ -2,8 +2,7 @@
     background-color:#0066ccaf;
     padding: 40px;
     border-radius: 16px;
-    width: 500px;
-    margin: 40px auto;
+    margin: 10px auto;
     box-shadow: 0 15px 35px rgba(0,0,0,0.25);
     animation: fadeIn 1s ease-in-out;
 }
@@ -59,8 +58,8 @@
 }
 
 body.appointment-whole {
-    background :url(../img/reception\ 101.jpg) no-repeat center center/cover;  
-     position: relative;
+    background :url(../img/reception\ 101.jpg) center center/cover;  
+    position: relative;
     height: 90vh;
     justify-items: center;
     align-content: center;

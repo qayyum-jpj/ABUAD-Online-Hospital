@@ -22,8 +22,8 @@
             <button type=" submit" class="login-btn">Login</button>
         </form>
         <div class="extra-links">
-            <p>Forgot Password? <a href="#"> Recover</a></p>
-            <p>Don't have an account? <a href="#">Register</a></p>
+            <!-- <p>Forgot Password? <a href="#"> Recover</a></p> -->
+            <p>Don't have an account? <a href="./register.php">Register</a></p>
         </div>
     </div>
 </body>
