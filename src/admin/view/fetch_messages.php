@@ -3,7 +3,7 @@ include '../inc/config.php';
 include '../inc/auth.php';
 
 // Get the request ID from the AJAX 'data' parameter
-$reqId = (int)($_GET['reqId'] ?? 0);
+$reqId = (int)($_GET['id'] ?? 0);
 
 if ($reqId > 0) {
     $messages = dbSelect('chat_messages', '*', "request_id=$reqId", "sent_at ASC");

@@ -5,13 +5,13 @@ mysqli_query($conn, "DELETE FROM chat_messages WHERE sent_at < NOW() - INTERVAL 
 
 $errs = [];
 
-// Get or create a chat_request row for this patient
+// Get or create a chat_request row for this patient using their user ID
 $chatReq = dbSelect('chat_requests', 'id', "patient_id=$uId");
 if($chatReq && mysqli_num_rows($chatReq) > 0) {
-    $chatRequestId = $cuUserID;
+    $chatRequestId = (int)mysqli_fetch_array($chatReq)['id'];
 } else {
     dbInsert('chat_requests', ['patient_id' => $uId, 'status' => 'pending']);
-    $chatRequestId = mysqli_insert_id($conn);
+    $chatRequestId = (int)mysqli_insert_id($conn);
 }
 
 if(isset($_POST['sendMessage'])) {

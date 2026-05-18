@@ -5,25 +5,20 @@ mysqli_query($conn, "DELETE FROM chat_messages WHERE sent_at < NOW() - INTERVAL 
 
 $errs = [];
 
-// Get or create a chat_request row for this patient
-$chatReq = dbSelect('chat_requests', 'id', "patient_id=$uId");
-if($chatReq && mysqli_num_rows($chatReq) > 0) {
-    $chatRequestId = mysqli_fetch_array($chatReq)['id'];
-} else {
-    dbInsert('chat_requests', ['patient_id' => $uId, 'status' => 'pending']);
-    $chatRequestId = mysqli_insert_id($conn);
-}
-
 if(isset($_POST['sendMessage'])) {
-    $message = trim(mysqli_real_escape_string($conn, $_POST['message'] ?? ''));
+    $requestId = (int)($_GET['id'] ?? 0);
+    $message   = trim(mysqli_real_escape_string($conn, $_POST['message'] ?? ''));
 
     if(empty($message)) $errs[] = "Message cannot be empty.";
+    if($requestId <= 0)  $errs[] = "Invalid request.";
 
     if(count($errs) == 0) {
-        if(dbInsert('chat_messages', ['request_id' => $chatRequestId, 'sender_id' => $uId, 'sender_role' => 'patient', 'message' => $message]) == 'success') {
+        if(dbInsert('chat_messages', ['request_id' => $requestId, 'sender_id' => $uId, 'sender_role' => 'admin', 'message' => $message]) == 'success') {
             $smsg = "message sent successfully";
         } else {
             $emsg = "something went wrong. try again";
         }
     }
 }
+
+include 'meet_link.php';
