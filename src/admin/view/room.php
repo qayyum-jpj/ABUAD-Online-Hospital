@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ABUAD Online Hospital - Meeting Room</title>
-    <link rel="icon" type="image/x-icon" href="/my/ABUAD-Online-Hospital/public/img/Ef3iqnGXgAIKpag-removebg-preview.png">
+    <link rel="icon" type="image/x-icon" href="/my/ABUAD-Online-Hospital/public/img/fljn.jpeg">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #1a1a2e; color: #fff; font-family: Arial, sans-serif; height: 100vh; display: flex; flex-direction: column; }

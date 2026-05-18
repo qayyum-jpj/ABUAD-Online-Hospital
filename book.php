@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Appointment</title>
-    <link rel="icon" type="image/x-icon" href="./img/Ef3iqnGXgAIKpag-removebg-preview.png">
+    <link rel="icon" type="image/x-icon" href="./img/fljn.jpeg">
     <link rel="stylesheet" href="./css/book.css">
 </head>
+
 <body class="appointment-whole">
     <div class="appointment-container">
         <h2>Book Appointment</h2>
@@ -47,4 +49,5 @@
         </form>
     </div>
 </body>
+
 </html>
