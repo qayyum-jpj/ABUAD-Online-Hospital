@@ -1,0 +1,22 @@
+RewriteEngine On
+
+RewriteRule ^home index.php [NC,L]
+
+RewriteRule ^login login.php [NC,L]
+RewriteRule ^logout logout.php [NC,L]
+RewriteRule ^auth auth.php [NC,L]
+RewriteRule ^redirect inc/redirect.php [NC,L]
+RewriteRule ^profile view/profile.php [NC,L]
+
+RewriteRule ^not-found view/404.php [NC,L]
+RewriteRule ^genders view/genders.php [NC,L]
+RewriteRule ^countries view/countries.php [NC,L]
+RewriteRule ^roles view/roles.php [NC,L]
+RewriteRule ^users view/users.php [NC,L]
+RewriteRule ^doctors view/doctors.php [NC,L]
+RewriteRule ^patients view/patients.php [NC,L]
+RewriteRule ^meetings view/meetings.php [NC,L]
+RewriteRule ^chat view/chat.php [NC,L]
+RewriteRule ^administrators view/administrators.php [NC,L]
+
+RewriteRule ^temp view/temp.php [NC,L]

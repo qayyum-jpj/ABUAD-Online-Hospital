@@ -1,0 +1,7 @@
+RewriteEngine On
+
+RewriteRule ^home index.php [NC,L]
+RewriteRule ^login src/admin/login.php [NC,L]
+RewriteRule ^login src/doctor/login.php [NC,L]
+RewriteRule ^register register.php [NC,L]
+RewriteRule ^book book.php [NC,L]

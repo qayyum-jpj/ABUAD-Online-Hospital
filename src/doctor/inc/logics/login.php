@@ -1,0 +1,33 @@
+<?php
+session_start();
+global $conn;
+if (isset($_POST['loginDoctor'])) {
+    $user = trim(mysqli_real_escape_string($conn, $_POST['user']));
+    $password = trim(mysqli_real_escape_string($conn, $_POST['password']));
+
+    if (empty($user)) {
+        $errs[] = $userError = "value expected";
+    }
+    if (empty($password)) {
+        $errs[] = $passwordError = "value expected";
+    }
+
+    if (count($errs) == 0) {
+        $password = md5($password);
+        $q = dbSelect('users', "*", "(LCASE(email='$user')) AND password='$password'", "role='doctor'");
+        if (mysqli_num_rows($q) > 0) {
+            #proceed with login
+            $userData = mysqli_fetch_array($q);
+            $_SESSION['abdDoc'] = $userData['id'];
+            $userName = $userData['fName'] . " " . $userData['lName'];
+            $smsg = "welcome back " . strtoupper($userName) . ", you will be taken to your dashboard shortly " . '<div class="ms-3 spinner-border spinner-border-sm text-success"></div>';
+            $url = $doctorRoot . 'redirect?dir=login';
+            header("Location: $url");
+        } else {
+            #return error msg for invalid credentials
+            $emsg = "no such user here";
+        }
+    } else {
+        $emsg = "you have " . count($errs) . " unresolved errors";
+    }
+}

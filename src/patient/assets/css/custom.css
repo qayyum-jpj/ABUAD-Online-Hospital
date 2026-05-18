@@ -1,0 +1,23 @@
+.br-lg {
+    border-radius: 17px;
+}
+
+.loader {
+    width: 300px !important;
+    height: 300px !important;
+}
+
+.loader-bg {
+    background-color: #E5EFF1 !important;
+}
+
+.img-preview-box img {
+    width: 200px !important;
+    height: 200px !important;
+    object-fit: cover;
+}
+
+.activity-box {
+    max-height: 500px !important;
+    overflow-y: auto !important;
+}

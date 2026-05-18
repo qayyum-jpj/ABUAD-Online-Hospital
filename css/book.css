@@ -1,0 +1,99 @@
+body.appointment-whole {
+    background: url("../public/img/reception 101.jpg") center center/cover no-repeat;  
+    position: relative;
+    min-height: 100vh; /* Changed to 100vh to fill the screen */
+    margin: 0;
+    
+    /* Fixed Centering: You need display: flex for justify/align to work */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Optional: If you want to blur the background image properly without blurring the form, 
+   using a pseudo-element is safer than backdrop-filter on the body. */
+body.appointment-whole::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.1);
+    z-index: -1;
+}
+
+.appointment-container {
+    background-color: #0066ccaf;
+    padding: 40px;
+    border-radius: 16px;
+    
+    /* Added responsive width controls */
+    width: 90%; 
+    max-width: 450px; 
+    box-sizing: border-box;
+    
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+    animation: fadeIn 1s ease-in-out;
+}
+
+.appointment-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #000000;
+    font-size: 26px;
+}
+
+.appointment-container .form-group {
+    margin-bottom: 15px;
+}
+
+.appointment-container label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+.appointment-container input, 
+.appointment-container select {
+    width: 100%;
+    padding: 12px;
+    box-sizing: border-box; /* Ensures padding doesn't push the width out */
+    
+    /* Fixed Invalid Color: RGB maxes out at 255 (You had 284) */
+    border: 3px solid rgba(0, 102, 255, 0.3); 
+    border-radius: 8px;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.appointment-container input:focus, 
+.appointment-container select:focus {
+    border-color: black;
+    box-shadow: 0 0 8px rgba(0, 102, 255, 0.3); /* Fixed invalid 284 value */
+    outline: none;
+}
+
+.book-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    background: #000000d3;
+    color: cornflowerblue;
+    font-size: 17px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 20px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.book-btn:hover {
+    background: mintcream;
+    color: #000; /* Added so text remains readable on hover */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
