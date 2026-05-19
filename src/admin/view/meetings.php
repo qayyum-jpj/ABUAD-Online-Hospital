@@ -46,9 +46,9 @@ include '../inc/sidebar.php';
                                     };
                                 ?>
                                 <tr>
-                                    <td><?= getColumnVal('users', $row['id']) ?></strong></td>
-                                    <td><?= getColumnVal('users', $row['id']) ?></td>
-                                    <td><?= date('d M, Y', strtotime($row['available_date'])) ?><br>
+                                    <td><?= getColumnVal('users', $row['patient_id'], 'fName') ?></strong></td>
+                                    <td><?= getColumnVal('users', $row['doctor_id'], 'fName') ?></td>
+                                    <td><?= date('d M, Y', strtotime(getColumnVal()) ?><br>
                                     <small class="text-muted"><?= $row['start_time'] ?></small></td>
                                     <td><span class="badge rounded-pill bg-<?= $triageColor ?> border"><?= $row['triage_level'] ?></span></td>
                                     <td>

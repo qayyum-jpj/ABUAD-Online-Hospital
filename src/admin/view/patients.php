@@ -138,7 +138,7 @@ include '../inc/head.php';
                                 <tr>
                                     <th>S/N</th>
                                     <th><i class="bi bi-toggles2 text-primary"></i></th>
-                                    <th>Username</th>
+                                    <th>Name</th>
                                     <th>Email</th>
                                     <th>Role</th>
                                     <th>DC</th>
@@ -173,7 +173,7 @@ include '../inc/head.php';
                                                 </div>
                                             </div>
                                         </td>
-                                        <td><?= $row['username'] ?></td>
+                                        <td><?= $row['fName'] . " " . $row['lName'] ?></td>
                                         <td><a href="mailto:<?= $row['email'] ?>"><?= $row['email'] ?></a></td>
                                         <td><?= $row['role'] ?></td>
                                         <td><?= $row['dc'] ?></td>

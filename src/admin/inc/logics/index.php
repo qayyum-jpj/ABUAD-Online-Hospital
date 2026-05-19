@@ -5,7 +5,7 @@ $administratorCnt = intval(cntRows('administrators',"id",null));
 $activeAdministratorCnt = intval(cntRows('administrators',"id","status='active'"));
 $inactiveAdministratorCnt = intval(cntRows('administrators',"id","status<>'active'"));
 
-$userCnt = intval(cntRows('users',"id",null));
+$userCnt = intval(cntRows('users',"id","role='doctor'"));
 $activeUserDocCnt = intval(cntRows('users',"id","role='doctor'"));
 $activeUserPatCnt = intval(cntRows('users',"id","role<>'doctor'"));
 

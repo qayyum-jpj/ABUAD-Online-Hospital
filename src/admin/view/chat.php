@@ -18,6 +18,9 @@ $reqId = (int)($_GET['id'] ?? 0);
 // Check if patient has sent at least one message (admin cannot write first)
 $patientHasMessaged = false;
 if ($reqId > 0) {
+    // Mark all patient messages in this chat as read
+    mysqli_query($conn, "UPDATE chat_messages SET is_read=1 WHERE request_id=$reqId AND sender_role='patient' AND is_read=0");
+
     $checkFirst = dbSelect('chat_messages', 'id', "request_id=$reqId AND sender_role='patient'");
     $patientHasMessaged = ($checkFirst && mysqli_num_rows($checkFirst) > 0);
 }
@@ -56,16 +59,29 @@ if ($reqId > 0) {
                         if ($users && mysqli_num_rows($users) > 0):
                             while ($u = mysqli_fetch_array($users)):
                                 $active = ($reqId == $u['id']) ? 'active' : '';
+                                // Count unread messages from this patient
+                                $chatReqRow = dbSelect('chat_requests', 'id', "patient_id={$u['id']}");
+                                $unread = 0;
+                                if($chatReqRow && mysqli_num_rows($chatReqRow) > 0) {
+                                    $crid = mysqli_fetch_array($chatReqRow)['id'];
+                                    $unreadQ = dbSelect('chat_messages', 'COUNT(*) as cnt', "request_id=$crid AND sender_role='patient' AND is_read=0");
+                                    if($unreadQ) $unread = (int)mysqli_fetch_array($unreadQ)['cnt'];
+                                }
                         ?>
                                 <a href="?id=<?= $u['id'] ?>" class="list-group-item list-group-item-action <?= $active ?>">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width:36px;height:36px;font-size:0.85rem;flex-shrink:0;">
-                                            <?= strtoupper(substr($u['fName'], 0, 1) . substr($u['lName'], 0, 1)) ?>
+                                    <div class="d-flex align-items-center justify-content-between gap-2">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width:36px;height:36px;font-size:0.85rem;flex-shrink:0;">
+                                                <?= strtoupper(substr($u['fName'], 0, 1) . substr($u['lName'], 0, 1)) ?>
+                                            </div>
+                                            <div>
+                                                <div class="fw-semibold" style="font-size:0.9rem;"><?= htmlspecialchars($u['fName'] . ' ' . $u['lName']) ?></div>
+                                                <small class="text-muted"><?= htmlspecialchars($u['role']) ?></small>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <div class="fw-semibold" style="font-size:0.9rem;"><?= htmlspecialchars($u['fName'] . ' ' . $u['lName']) ?></div>
-                                            <small class="text-muted"><?= htmlspecialchars($u['role']) ?></small>
-                                        </div>
+                                        <?php if($unread > 0): ?>
+                                        <span class="badge bg-danger rounded-pill"><?= $unread ?></span>
+                                        <?php endif; ?>
                                     </div>
                                 </a>
                             <?php endwhile;
@@ -182,6 +198,20 @@ if ($reqId > 0) {
                                     <input type="time" name="meet_time" class="form-control" required>
                                 </div>
                             </div>
+                            <div class="mb-3">
+                                <label class="form-label">Symptoms Summary</label>
+                                <textarea name="symptoms_summary" class="form-control" rows="3" placeholder="Briefly describe the patient's symptoms..." required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Triage Level</label>
+                                <select name="triage_level" class="form-select" required>
+                                    <option value="">-- Select Triage Level --</option>
+                                    <option value="Low">Low</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="High">High</option>
+                                    <option value="Emergency">Emergency</option>
+                                </select>
+                            </div>
                             <p class="text-muted" style="font-size:0.8rem;"><i class="bi bi-info-circle"></i> A unique WebRTC meeting link will be auto-generated and sent to the doctor by email. Only the patient will see the link in their dashboard.</p>
                             <button type="submit" name="saveMeetLink" class="btn btn-primary w-100">Schedule &amp; Notify Doctor</button>
                         </form>
@@ -200,16 +230,28 @@ if ($reqId > 0) {
                 $users = dbSelect('users', 'id, fName, lName, role', "role!='doctor'", 'fName ASC');
                 if ($users && mysqli_num_rows($users) > 0):
                     while ($u = mysqli_fetch_array($users)):
+                        $chatReqRow = dbSelect('chat_requests', 'id', "patient_id={$u['id']}");
+                        $unread = 0;
+                        if($chatReqRow && mysqli_num_rows($chatReqRow) > 0) {
+                            $crid = mysqli_fetch_array($chatReqRow)['id'];
+                            $unreadQ = dbSelect('chat_messages', 'COUNT(*) as cnt', "request_id=$crid AND sender_role='patient' AND is_read=0");
+                            if($unreadQ) $unread = (int)mysqli_fetch_array($unreadQ)['cnt'];
+                        }
                 ?>
                         <a href="?id=<?= $u['id'] ?>" class="list-group-item list-group-item-action">
-                            <div class="d-flex align-items-center gap-2">
-                                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width:36px;height:36px;font-size:0.85rem;flex-shrink:0;">
-                                    <?= strtoupper(substr($u['fName'], 0, 1) . substr($u['lName'], 0, 1)) ?>
+                            <div class="d-flex align-items-center justify-content-between gap-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width:36px;height:36px;font-size:0.85rem;flex-shrink:0;">
+                                        <?= strtoupper(substr($u['fName'], 0, 1) . substr($u['lName'], 0, 1)) ?>
+                                    </div>
+                                    <div>
+                                        <div class="fw-semibold" style="font-size:0.9rem;"><?= htmlspecialchars($u['fName'] . ' ' . $u['lName']) ?></div>
+                                        <small class="text-muted"><?= htmlspecialchars($u['role']) ?></small>
+                                    </div>
                                 </div>
-                                <div>
-                                    <div class="fw-semibold" style="font-size:0.9rem;"><?= htmlspecialchars($u['fName'] . ' ' . $u['lName']) ?></div>
-                                    <small class="text-muted"><?= htmlspecialchars($u['role']) ?></small>
-                                </div>
+                                <?php if($unread > 0): ?>
+                                <span class="badge bg-danger rounded-pill"><?= $unread ?></span>
+                                <?php endif; ?>
                             </div>
                         </a>
                     <?php endwhile;

@@ -533,19 +533,7 @@ footer strong{
     border-radius: 10px;
 }
 
-.book-btn{
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background:#010048;
-    color: whitesmoke;
-    font-size: 0.85rem;
-    padding: 6px 12px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background 0.3s ease-in;
-}
+
 
 .book-btn:hover{
     background: #edf7fc;
