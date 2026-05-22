@@ -1,4 +1,4 @@
-<?php 
+<?php
 include 'inc/config.php';
 include 'inc/auth.php';
 
@@ -30,7 +30,7 @@ include 'inc/head.php';
 
             <div class="col-lg-8">
                 <div class="row">
-                    
+
                     <div class="col-xxl-4 col-md-6">
                         <div class="card info-card admin-card border-start border-primary border-4">
                             <div class="card-body">
@@ -58,7 +58,7 @@ include 'inc/head.php';
                                     </div>
                                     <div class="ps-3">
                                         <h6 class="mb-0"><?= $userCnt ?></h6>
-                                        <span class="text-muted small">Doc: <b><?= $activeUserDocCnt ?></b></span> | 
+                                        <span class="text-muted small">Doc: <b><?= $activeUserDocCnt ?></b></span> |
                                         <span class="text-muted small">Pat: <b><?= $activeUserPatCnt ?></b></span>
                                     </div>
                                 </div>
@@ -91,7 +91,7 @@ include 'inc/head.php';
                             <div class="card-body">
                                 <ul class="nav nav-tabs nav-tabs-bordered mb-3" id="entryTabs" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link <?= (!isset($_GET['vw']) || $_GET['vw'] == 'entry1') ? 'active' : '' ?>" href="<?= $adminRoot ?>home?vw=entry1">General Entries</a>
+                                        <a class="nav-link <?= (!isset($_GET['vw']) || $_GET['vw'] == 'entry1') ? 'active' : '' ?>" href="<?= $adminRoot ?>home?vw=entry1">Meetings Today</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link <?= (isset($_GET['vw']) && $_GET['vw'] == 'entry2') ? 'active' : '' ?>" href="<?= $adminRoot ?>home?vw=entry2">Specialized Records</a>
@@ -99,29 +99,65 @@ include 'inc/head.php';
                                 </ul>
 
                                 <div class="tab-content pt-2">
-                                    <?php if(!isset($_GET['vw']) || $_GET['vw'] == 'entry1'): ?>
-                                    <table class="table table-hover datatable mt-2">
-                                        <thead class="table-light">
-                                            <tr>
-                                                <th scope="col">ID</th>
-                                                <th scope="col">Patient/Item</th>
-                                                <th scope="col">Category</th>
-                                                <th scope="col">Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td><a href="#" class="fw-bold">#001</a></td>
-                                                <td>Sample Entry</td>
-                                                <td>Clinical</td>
-                                                <td><span class="badge bg-success">Completed</span></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <?php if (!isset($_GET['vw']) || $_GET['vw'] == 'entry1'): ?>
+                                        <table class="table table-hover datatable mt-2">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th scope="col">ID</th>
+                                                    <th scope="col">Patient | Doctor</th>
+                                                    <th scope="col">Time</th>
+                                                    <th scope="col">Created by</th>
+                                                    <th scope="col">Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                <?php
+                                                $no = 1;
+                                                $q = dbSelectDate('meet_links', "*", "meet_date");
+                                                while ($row = mysqli_fetch_array($q)) {
+
+                                                ?>
+                                                    <tr>
+                                                        <td><a href="#" class="fw-bold"><?= $no; ?></a></td>
+                                                        <td><?= getColumnVal('users', $row['patient_id'], 'fName')." ".getColumnVal('users', $row['patient_id'], 'lName') ?> | Dr. <?= getColumnVal('users', $row['doctor_id'], 'fName')." ".getColumnVal('users', $row['doctor_id'], 'lName') ?></td>
+                                                        <td><?= $row['meet_time'] ?></td>
+                                                        <td><?= getColumnVal('administrators', $row['admin_id'], 'fName')." ".getColumnVal('administrators', $row['admin_id'], 'lName') ?></td>
+                                                        <td><span class="badge bg-success"><?= $row['status'] ?></span></td>
+                                                    </tr>
+                                                <?php $no++; } ?>
+                                            </tbody>
+                                        </table>
                                     <?php endif; ?>
-                                    
-                                    <?php if(isset($_GET['vw']) && $_GET['vw'] == 'entry2'): ?>
-                                        <p class="text-center py-4 text-muted">No specialized records found for today.</p>
+
+                                    <?php if (isset($_GET['vw']) && $_GET['vw'] == 'entry2'): ?>
+                                        <table class="table table-hover datatable mt-2">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th scope="col">ID</th>
+                                                    <th scope="col">Patient | Doctor</th>
+                                                    <th scope="col">Symptoms</th>
+                                                    <th scope="col">Time</th>
+                                                    <th scope="col">Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                <?php
+                                                $no = 1;
+                                                $q = dbSelect('meet_links', "*");
+                                                while ($row = mysqli_fetch_array($q)) {
+
+                                                ?>
+                                                    <tr>
+                                                        <td><a href="#" class="fw-bold"><?= $no; ?></a></td>
+                                                        <td><?= getColumnVal('users', $row['patient_id'], 'fName')." ".getColumnVal('users', $row['patient_id'], 'lName') ?> | <?= getColumnVal('users', $row['doctor_id'], 'fName')." ".getColumnVal('users', $row['doctor_id'], 'lName') ?></td>
+                                                        <td></td>
+                                                        <td><span class="badge bg-success"><?= $row['status'] ?></span></td>
+                                                    </tr>
+                                                <?php $no++; } ?>
+                                            </tbody>
+                                        </table>
                                     <?php endif; ?>
                                 </div>
                             </div>
@@ -138,19 +174,20 @@ include 'inc/head.php';
                     <div class="card-body px-4">
                         <div class="activity">
                             <?php
-                            $q = dbSelect('act_logs',"*","user=$uId AND userType='admin'","dc");
-                            if(mysqli_num_rows($q) > 0){
-                                while($row = mysqli_fetch_array($q)){
+                            $q = dbSelect('act_logs', "*", "user=$uId AND userType='admin'", "dc");
+                            if (mysqli_num_rows($q) > 0) {
+                                while ($row = mysqli_fetch_array($q)) {
                                     $dcInSecs = strtotime($row['dc']);
                             ?>
-                            <div class="activity-item d-flex mb-3">
-                                <div class="activite-label text-muted small" style="min-width: 65px;"><?= fancyTime($dcInSecs) ?></div>
-                                <i class='bi bi-circle-fill activity-badge text-<?= $row['color'] ?> align-self-start mx-2' style="font-size: 0.7rem;"></i>
-                                <div class="activity-content border-start ps-3 pb-3">
-                                    <span class="text-dark"><?= $row['log'] ?></span>
-                                </div>
-                            </div>
-                            <?php }} else { ?>
+                                    <div class="activity-item d-flex mb-3">
+                                        <div class="activite-label text-muted small" style="min-width: 65px;"><?= fancyTime($dcInSecs) ?></div>
+                                        <i class='bi bi-circle-fill activity-badge text-<?= $row['color'] ?> align-self-start mx-2' style="font-size: 0.7rem;"></i>
+                                        <div class="activity-content border-start ps-3 pb-3">
+                                            <span class="text-dark"><?= $row['log'] ?></span>
+                                        </div>
+                                    </div>
+                                <?php }
+                            } else { ?>
                                 <div class="text-center py-5">
                                     <i class="bi bi-clipboard-x text-muted display-4"></i>
                                     <p class="text-muted mt-2">No activity recorded today.</p>

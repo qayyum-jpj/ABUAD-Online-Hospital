@@ -5,7 +5,7 @@
     <section class="hero" aria-label="Welcome">
         <div class="image-container">
             <div class="hero-content">
-                <h1>WELCOME TO <span>ABUAD ONLINE HOSPITAL</span></h1>
+                <h1>WELCOME TO <span>National ONLINE HOSPITAL</span></h1>
                 <p>Your Health, Our Priority</p>
                 <a href="#" class="cta-button">Book an Appointment</a>
             </div>
@@ -15,13 +15,13 @@
     <section id="about" class="about" aria-labelledby="about-heading">
         <div class="about-container">
             <div class="about-image">
-                <img src="./public/img/Screenshot 2025-09-19 073304.png" alt="Exterior view of ABUAD Hospital building"
+                <img src="./public/img/Screenshot 2025-09-19 073304.png" alt="Exterior view of National Hospital building"
                     loading="lazy">
             </div>
             <div class="about-text">
                 <h2 id="about-heading">About Us</h2>
                 <p>
-                    At <strong>ABUAD Online Hospital</strong>, we believe healthcare should be as close as your
+                    At <strong>National Online Hospital</strong>, we believe healthcare should be as close as your
                     fingertips. Our platform is designed to connect patients with licensed doctors, making
                     consultations, prescriptions, and health records accessible anytime, anywhere.
                 </p>
@@ -32,7 +32,7 @@
                 </p>
                 <p>
                     Whether you need an urgent consultation, a routine check-up, or access to your medical history,
-                    ABUAD Online Hospital is your trusted health partner—ensuring that <strong>your health remains
+                    National Online Hospital is your trusted health partner—ensuring that <strong>your health remains
                         our top priority.</strong>
                 </p>
             </div>
@@ -75,7 +75,7 @@
                 <div class="card">
                     <div class="card-header">
                         <img src="./public/img/photo 4.jpg" alt="Portrait of Dr. Grace Oladipo" loading="lazy">
-                    </div>                    
+                    </div>
                     <div class="card-body">
                         <p class="card-class">Ophthalmologist</p>
                         <h3>Dr. Grace Oladipo</h3>
@@ -138,9 +138,9 @@
                         <h3>Get in Touch</h3>
                         <p><strong>Phone:</strong> <a href="tel:+2349061112684"
                                 style="color: inherit; text-decoration: none;">+234 906 111 2684</a></p>
-                        <p><strong>Email:</strong> <a href="mailto:support@abuadoh.org"
-                                style="color: inherit; text-decoration: none;">support@abuadoh.org</a></p>
-                        <p><strong>Address:</strong> Abuad Teaching Hospital, Ado-Ekiti, Nigeria</p>
+                        <p><strong>Email:</strong> <a href="mailto:support@Nationaloh.org"
+                                style="color: inherit; text-decoration: none;">support@Nationaloh.org</a></p>
+                        <p><strong>Address:</strong> National Teaching Hospital, Ado-Ekiti, Nigeria</p>
                     </div>
                 </div>
 

@@ -2,23 +2,25 @@
 include '../inc/config.php';
 include '../inc/auth.php';
 
-// Get the request ID from the AJAX 'data' parameter
-$reqId = (int)($_GET['id'] ?? 0);
+// Load messages between admin ($uId) and patient ($_GET['userID'])
+$patientId = (int)($_GET['userID'] ?? 0);
 
-if ($reqId > 0) {
-    $messages = dbSelect('chat_messages', '*', "request_id=$reqId", "sent_at ASC");
+if($patientId > 0) {
+    $messages = mysqli_query($conn,
+        "SELECT * FROM chat_messages
+         WHERE (sender_id=$uId AND receiver_id=$patientId)
+            OR (sender_id=$patientId AND receiver_id=$uId)
+         ORDER BY sent_at ASC"
+    );
 
-    if ($messages && mysqli_num_rows($messages) > 0) {
-        while ($msg = mysqli_fetch_array($messages)) {
-            // Logic to check if the message was sent by the current logged-in patient
-            // We assume 'sender_role' is stored in the DB to distinguish users
-            $isMe  = ($msg['sender_role'] == 'patient') ? 'bg-primary text-white align-self-end' : 'bg-light text-dark align-self-start';
-            $float = ($msg['sender_role'] == 'patient') ? 'text-end' : 'text-start';
-            $align = ($msg['sender_role'] == 'patient') ? 'justify-content-end' : 'justify-content-start';
+    if($messages && mysqli_num_rows($messages) > 0) {
+        while($msg = mysqli_fetch_array($messages)) {
+            $isMe  = ($msg['sender_role'] == 'admin') ? 'bg-primary text-white' : 'bg-light text-dark';
+            $float = ($msg['sender_role'] == 'admin') ? 'justify-content-end' : 'justify-content-start';
+            $align = ($msg['sender_role'] == 'admin') ? 'text-end' : 'text-start';
             ?>
-            
-            <div class="d-flex <?= $align ?> mb-3">
-                <div class="d-flex flex-column <?= $float ?>" style="max-width: 80%;">
+            <div class="d-flex <?= $float ?> mb-3">
+                <div class="d-flex flex-column <?= $align ?>" style="max-width:80%;">
                     <div class="p-2 rounded shadow-sm border <?= $isMe ?>">
                         <?= htmlspecialchars($msg['message']) ?>
                     </div>
@@ -27,18 +29,12 @@ if ($reqId > 0) {
                     </small>
                 </div>
             </div>
-
             <?php
         }
     } else {
-        // Fallback for an empty conversation
-        echo '
-        <div class="text-center text-muted py-5">
-            <i class="bi bi-chat-dots fs-1"></i>
-            <p class="mt-2">No messages yet. Start the conversation!</p>
-        </div>';
+        echo '<div class="text-center text-muted py-5"><i class="bi bi-chat-dots fs-1"></i><p class="mt-2">No messages yet.</p></div>';
     }
 } else {
-    echo '<div class="alert alert-danger">Error: No conversation selected.</div>';
+    echo '<div class="alert alert-danger">No conversation selected.</div>';
 }
 ?>

@@ -82,6 +82,32 @@ function dbSelect($table,$cols="*",$where = null, $order = null, $limit = null, 
     }
 }
 
+function dbSelectDate($table,$cols="*",$where = null, $order = null, $limit = null, $offset = null){
+    global $conn;
+    if ($where != null) {
+        $sql="SELECT $cols FROM $table WHERE $where = CURRENT_DATE()";
+    }else{
+        $sql="SELECT $cols FROM $table";
+    }
+    if($order != null){
+        $sql .= ' ORDER BY '.$order;
+    }
+    if($limit != null){
+        $sql .= ' LIMIT '.$limit;
+    }
+    if($offset != null){
+        $sql .= ' OFFSET '.$offset;
+    }
+
+    $query = mysqli_query($conn,$sql);
+    if($query){
+        return $query;
+    }
+    else{
+        return 'error';
+    }
+}
+
 function logAction($msg, $user, $userType = 'admin', $color = 'success'){
     global $now;
     if(!empty($msg) && ($user != '' || $user > 0)){

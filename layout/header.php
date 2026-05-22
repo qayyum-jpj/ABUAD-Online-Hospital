@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="ABUAD Online Hospital - Connecting patients with licensed doctors for fast, reliable, and accessible healthcare anytime, anywhere.">
+        content="National Online Hospital - Connecting patients with licensed doctors for fast, reliable, and accessible healthcare anytime, anywhere.">
     <title>AFE BABALOLA ONLINE HOSPITAL | Your Health, Our Priority <?= $title ?></title>
 
     <link rel="icon" type="image/x-icon" href="./public/img/fljn.jpeg">
@@ -19,8 +19,8 @@
     <header>
         <nav aria-label="Main Navigation">
             <div class="logo">
-                <img src="./public/img/Ef3iqnGXgAIKpag.jpg" alt="ABUADOH Hospital Logo">
-                <h2>ABUADOH</h2>
+                <img src="./public/img/Ef3iqnGXgAIKpag.jpg" alt="NationalOH Hospital Logo">
+                <h2>NationalOH</h2>
             </div>
             <ul>
                 <li><a href="<?= $mainRoot ?>" class="current" aria-current="page">Home</a></li>

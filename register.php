@@ -35,7 +35,7 @@ if (isset($_POST['register'])) {
     }
 
     if (empty($errors)) {
-        $hashed = password_hash($password, PASSWORD_BCRYPT);
+        $hashed = md5($password);
         $userID = 'PAT-' . random_int(100, 999);
         $role   = 'patient';
         $status = 'pending';

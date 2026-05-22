@@ -8,6 +8,13 @@
                 <span>Dashboard</span>
             </a>
         </li><!-- End Dashboard Nav -->
+        
+        <li>
+            <a class="nav-link" href="<?= $adminRoot ?>chat">
+                <i class="bi bi-chat"></i>
+                <span>Chat</span>
+            </a>
+        </li>
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#users-nav" data-bs-toggle="collapse" href="#">
@@ -51,11 +58,6 @@
                 <li>
                     <a href="<?= $adminRoot ?>meetings">
                         <i class="bi bi-circle"></i><span>Booked Meetings</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="<?= $adminRoot ?>chat">
-                        <i class="bi bi-circle"></i><span>Chat</span>
                     </a>
                 </li>
                 <li>

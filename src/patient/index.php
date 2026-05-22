@@ -29,7 +29,11 @@ include 'inc/head.php';
         <div class="row">
 
             <?php
-            $mlResult = dbSelect('meet_links', 'meet_url, meet_date, meet_time', "patient_id=$uId");
+            $mlResult = $mlResult = dbSelect(
+                'meet_links',
+                'meet_url, meet_date, meet_time',
+                "patient_id=$uId AND meet_date = CURDATE()" 
+            );
             if ($mlResult && mysqli_num_rows($mlResult) > 0):
                 $ml = mysqli_fetch_array($mlResult);
             ?>
@@ -170,7 +174,8 @@ include 'inc/head.php';
                                             <?= $row['log'] ?>
                                         </div>
                                     </div>
-                            <?php } } else { ?>
+                                <?php }
+                            } else { ?>
                                 <p class="text-muted text-center py-4">No recent activity.</p>
                             <?php } ?>
                         </div>

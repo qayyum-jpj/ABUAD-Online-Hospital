@@ -30,7 +30,6 @@ include '../inc/sidebar.php';
                                     <th>Time / Date</th>
                                     <th>Triage</th>
                                     <th>Status</th>
-                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -46,10 +45,16 @@ include '../inc/sidebar.php';
                                     };
                                 ?>
                                 <tr>
-                                    <td><?= getColumnVal('users', $row['patient_id'], 'fName') ?></strong></td>
-                                    <td><?= getColumnVal('users', $row['doctor_id'], 'fName') ?></td>
-                                    <td><?= date('d M, Y', strtotime(getColumnVal()) ?><br>
-                                    <small class="text-muted"><?= $row['start_time'] ?></small></td>
+                                    <td><?= getColumnVal('users', $row['patient_id'], 'fName').' '.getColumnVal('users', $row['patient_id'], 'lName') ?></strong></td>
+                                    <td><?= getColumnVal('users', $row['doctor_id'], 'fName').' '.getColumnVal('users', $row['doctor_id'], 'lName') ?></td>
+                                    <?php 
+                                    $meetlink = getColumnVal('appointments', $row['id'], 'meeting_link');
+                                    $date = getColumnValWhereDef('meet_links', 'meet_url', $meetlink, 'meet_date');
+                                    echo $date;
+                                    $time = getColumnValWhereDef('meet_links', 'meet_url', $meetlink, 'meet_time');
+                                    ?>
+                                    <td><?= date('d M, Y', strtotime($date)); ?><br>
+                                    <small class="text-muted"><?= $time ?></small></td>
                                     <td><span class="badge rounded-pill bg-<?= $triageColor ?> border"><?= $row['triage_level'] ?></span></td>
                                     <td>
                                         <?php if($row['status'] == 'Accepted'): ?>

@@ -1,9 +1,9 @@
-<?php 
+<?php
 include '../inc/config.php';
 include '../inc/auth.php';
 
 const TITLE      = 'Chat';
-const HEADER     = 'Manage Chat';
+const HEADER     = 'Support Chat';
 const BREADCRUMB = 'chat';
 const KEYWORDS   = '';
 const PAGE_DESC  = 'the patient chat page';
@@ -13,6 +13,9 @@ $pgURL = $patientRoot . "chat";
 include '../inc/logics/chat.php';
 include '../inc/head.php';
 
+// userID = the admin's ID from the URL
+$adminUserId = (int)($_GET['userID'] ?? 0);
+
 // Fetch existing meet link for this patient
 $existingMeetLink = null;
 $mlRow = dbSelect('meet_links', 'meet_url', "patient_id=$uId");
@@ -21,17 +24,14 @@ if($mlRow && mysqli_num_rows($mlRow) > 0) {
 }
 ?>
 
-<!-- ======= Header ======= -->
 <?php include '../inc/header.php'; ?>
-
-<!-- ======= Sidebar ======= -->
 <?php include '../inc/sidebar.php'; ?>
 
 <main id="main" class="main">
 
     <?php include '../inc/page-header.php'; ?>
 
-    <?php if($chatRequestId > 0): ?>
+    <?php if($adminUserId > 0): ?>
 
     <div class="row g-3">
 
@@ -41,19 +41,27 @@ if($mlRow && mysqli_num_rows($mlRow) > 0) {
                 <div class="card-header fw-semibold">Admin</div>
                 <ul class="list-group list-group-flush" style="max-height:420px; overflow-y:auto;">
                     <?php
-                    $administrators = dbSelect('administrators', 'id, fName, lName, role', "role=1", 'fName ASC');
+                    $administrators = dbSelect('administrators', 'id, fName, lName', null, 'fName ASC');
                     if($administrators && mysqli_num_rows($administrators) > 0):
                         while($u = mysqli_fetch_array($administrators)):
+                            $active = ($adminUserId == $u['id']) ? 'active' : '';
+                            $unreadQ = mysqli_query($conn, "SELECT COUNT(*) as cnt FROM chat_messages WHERE sender_id={$u['id']} AND receiver_id=$uId AND sender_role='admin' AND is_read=0");
+                            $unread  = $unreadQ ? (int)mysqli_fetch_array($unreadQ)['cnt'] : 0;
                     ?>
-                    <a href="?id=<?= $u['id'] ?>" class="list-group-item list-group-item-action">
-                        <div class="d-flex align-items-center gap-2">
-                            <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width:36px;height:36px;font-size:0.85rem;flex-shrink:0;">
-                                <?= strtoupper(substr($u['fName'],0,1).substr($u['lName'],0,1)) ?>
+                    <a href="?userID=<?= $u['id'] ?>" class="list-group-item list-group-item-action <?= $active ?>">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width:36px;height:36px;font-size:0.85rem;flex-shrink:0;">
+                                    <?= strtoupper(substr($u['fName'],0,1).substr($u['lName'],0,1)) ?>
+                                </div>
+                                <div>
+                                    <div class="fw-semibold" style="font-size:0.9rem;"><?= htmlspecialchars($u['fName'].' '.$u['lName']) ?></div>
+                                    <small class="text-muted">Admin</small>
+                                </div>
                             </div>
-                            <div>
-                                <div class="fw-semibold" style="font-size:0.9rem;"><?= htmlspecialchars($u['fName'].' '.$u['lName']) ?></div>
-                                <small class="text-muted"><?= htmlspecialchars(getColumnVal('roles', $u['role'])) ?></small>
-                            </div>
+                            <?php if($unread > 0): ?>
+                            <span class="badge bg-danger rounded-pill"><?= $unread ?></span>
+                            <?php endif; ?>
                         </div>
                     </a>
                     <?php endwhile; else: ?>
@@ -71,38 +79,19 @@ if($mlRow && mysqli_num_rows($mlRow) > 0) {
                 </div>
 
                 <?php if($existingMeetLink): ?>
-                <div class="alert alert-info m-2 py-2 mb-0" style="font-size:0.85rem;">
-                    <i class="bi bi-link-45deg"></i> Active meet link:
-                    <a href="<?= htmlspecialchars($existingMeetLink) ?>" target="_blank"><?= htmlspecialchars($existingMeetLink) ?></a>
+                <div class="alert alert-success m-2 py-2 mb-0" style="font-size:0.85rem;">
+                    <i class="bi bi-camera-video-fill"></i> Meeting scheduled:
+                    <a href="<?= htmlspecialchars($existingMeetLink) ?>" target="_blank" class="btn btn-success btn-sm ms-2">Join Meeting</a>
                 </div>
                 <?php endif; ?>
 
-                <div class="chat-body p-3" style="height:300px; overflow-y:scroll;" id="msgArea">
-                    <?php
-                    $messages = dbSelect('chat_messages', '*', "request_id=$chatRequestId", "sent_at ASC");
-                    if($messages && mysqli_num_rows($messages) > 0) {
-                        while($msg = mysqli_fetch_array($messages)) {
-                            $isMe  = ($msg['sender_role'] == 'patient') ? 'bg-primary text-white align-self-end' : 'bg-light text-dark';
-                            $float = ($msg['sender_role'] == 'patient') ? 'text-end' : 'text-start';
-                            echo '<div class="d-flex flex-column mb-3 '.$float.'">';
-                            echo '  <div class="p-2 rounded shadow-sm border '.$isMe.'" style="max-width:80%;display:inline-block;">';
-                            echo        htmlspecialchars($msg['message']);
-                            echo '  </div>';
-                            echo '  <small class="text-muted" style="font-size:0.65rem;">'.date('H:i', strtotime($msg['sent_at'])).'</small>';
-                            echo '</div>';
-                        }
-                    } else {
-                        echo '<div class="text-center text-muted py-5"><i class="bi bi-chat-dots"></i><p>No messages yet.</p></div>';
-                    }
-                    ?>
-                </div>
+                <div class="chat-body p-3" style="height:300px; overflow-y:scroll;" id="msgArea"></div>
 
                 <div class="card-footer">
-                    <form id="chatForm" method="POST" action="">
+                    <form id="chatForm">
                         <div class="input-group">
-                            <input type="text" id="msgInput" name="message" class="form-control" placeholder="Type message...">
-                            <input type="hidden" name="request_id" id="request_id" value="<?= $chatRequestId ?>">
-                            <button class="btn btn-success" type="submit" name="sendMessage">Send</button>
+                            <input type="text" id="msgInput" class="form-control" placeholder="Type message...">
+                            <button class="btn btn-success" type="submit">Send</button>
                         </div>
                     </form>
                 </div>
@@ -110,7 +99,6 @@ if($mlRow && mysqli_num_rows($mlRow) > 0) {
         </div>
 
     </div>
-    <!-- End Row -->
 
     <?php else: ?>
 
@@ -119,19 +107,26 @@ if($mlRow && mysqli_num_rows($mlRow) > 0) {
         <div class="card-header fw-semibold">Admin</div>
         <ul class="list-group list-group-flush">
             <?php
-            $administrators = dbSelect('administrators', 'id, fName, lName, role', "role=1", 'fName ASC');
+            $administrators = dbSelect('administrators', 'id, fName, lName', null, 'fName ASC');
             if($administrators && mysqli_num_rows($administrators) > 0):
                 while($u = mysqli_fetch_array($administrators)):
+                    $unreadQ = mysqli_query($conn, "SELECT COUNT(*) as cnt FROM chat_messages WHERE sender_id={$u['id']} AND receiver_id=$uId AND sender_role='admin' AND is_read=0");
+                    $unread  = $unreadQ ? (int)mysqli_fetch_array($unreadQ)['cnt'] : 0;
             ?>
-            <a href="?id=<?= $u['id'] ?>" class="list-group-item list-group-item-action">
-                <div class="d-flex align-items-center gap-2">
-                    <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width:36px;height:36px;font-size:0.85rem;flex-shrink:0;">
-                        <?= strtoupper(substr($u['fName'],0,1).substr($u['lName'],0,1)) ?>
+            <a href="?userID=<?= $u['id'] ?>" class="list-group-item list-group-item-action">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width:36px;height:36px;font-size:0.85rem;flex-shrink:0;">
+                            <?= strtoupper(substr($u['fName'],0,1).substr($u['lName'],0,1)) ?>
+                        </div>
+                        <div>
+                            <div class="fw-semibold" style="font-size:0.9rem;"><?= htmlspecialchars($u['fName'].' '.$u['lName']) ?></div>
+                            <small class="text-muted">Admin</small>
+                        </div>
                     </div>
-                    <div>
-                        <div class="fw-semibold" style="font-size:0.9rem;"><?= htmlspecialchars($u['fName'].' '.$u['lName']) ?></div>
-                        <small class="text-muted"><?= htmlspecialchars($u['role']) ?></small>
-                    </div>
+                    <?php if($unread > 0): ?>
+                    <span class="badge bg-danger rounded-pill"><?= $unread ?></span>
+                    <?php endif; ?>
                 </div>
             </a>
             <?php endwhile; else: ?>
@@ -148,16 +143,16 @@ if($mlRow && mysqli_num_rows($mlRow) > 0) {
 <?php include '../inc/foot.php'; ?>
 
 <script>
-$(function () {
-    const requestId = <?= $chatRequestId ?>;
-    const msgArea   = $('#msgArea');
+$(function() {
+    const adminUserId = <?= $adminUserId ?>;
+    const msgArea = $('#msgArea');
 
     function scrollToBottom() { msgArea.scrollTop(msgArea[0].scrollHeight); }
 
     function loadMessages() {
-        if(requestId <= 0) return;
+        if(adminUserId <= 0) return;
         $.ajax({
-            url: 'view/fetch_messages.php?id=' + requestId,
+            url: 'view/fetch_messages.php?userID=' + adminUserId,
             method: 'GET',
             success: function(response) {
                 if(msgArea.html().trim() !== response.trim()) {
@@ -176,7 +171,7 @@ $(function () {
         let msg = $('#msgInput').val().trim();
         if(msg === '') return;
         $.ajax({
-            url: 'view/send_message.php?id=' + requestId,
+            url: 'view/send_message.php?userID=' + adminUserId,
             method: 'POST',
             data: { message: msg },
             success: function() {

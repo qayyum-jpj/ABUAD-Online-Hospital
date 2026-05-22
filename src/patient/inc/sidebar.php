@@ -9,6 +9,13 @@
             </a>
         </li><!-- End Dashboard Nav -->
 
+        <li>
+            <a class="nav-link" href="<?= $patientRoot ?>chat">
+                <i class="bi bi-chat"></i>
+                <span>Chat</span>
+            </a>
+        </li>
+
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#users-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-menu-button-wide"></i><span>App Users</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -46,11 +53,6 @@
                 <li>
                     <a href="<?= $patientRoot ?>countries">
                         <i class="bi bi-circle"></i><span>Countries</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="<?= $patientRoot ?>chat">
-                        <i class="bi bi-circle"></i><span>Chat</span>
                     </a>
                 </li>
                 <li>
